@@ -139,6 +139,9 @@ else
   # Enable EM remote access
   runuser oracle -s /bin/bash -c ${ORACLE_BASE}/scripts/${EM_REMOTE_ACCESS}
 
+  # Init Arena
+  runuser oracle -s /bin/bash -c ${ORACLE_BASE}/scripts/${ARENA_INIT}
+
   # Move database operational files to oradata
   moveFiles;
    

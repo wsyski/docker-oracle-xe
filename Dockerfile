@@ -1,9 +1,9 @@
 FROM oraclelinux:7-slim
-LABEL MAINTAINER="Adrian Png <adrian.png@fuzziebrain.com>"
+LABEL MAINTAINER="Wojciech Syski <wsyski@gmail.com>"
 
 ENV \
   # The only environment variable that should be changed!
-  ORACLE_PASSWORD=Oracle18 \
+  ORACLE_PASSWORD=axiell1 \
   # DO NOT CHANGE 
   ORACLE_DOCKER_INSTALL=true \
   ORACLE_SID=XE \
@@ -13,6 +13,7 @@ ENV \
   RUN_FILE=runOracle.sh \
   SHUTDOWN_FILE=shutdownDb.sh \
   EM_REMOTE_ACCESS=enableEmRemoteAccess.sh \
+  ARENA_INIT=arenaInit.sh \
   EM_RESTORE=reconfigureEm.sh \
   ORACLE_XE_RPM=oracle-database-xe-18c-1.0-1.x86_64.rpm \
   CHECK_DB_FILE=checkDBStatus.sh

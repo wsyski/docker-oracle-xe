@@ -39,7 +39,7 @@ cd docker-oracle-xe
 cp ~/Downloads/oracle-database-xe-18c-1.0-1.x86_64.rpm files/
 
 -- Build Image
-docker build -t oracle-xe:18c .
+docker build -t wsyski/dockerhub:oracle-xe .
 ```
 
 ## Run Container
@@ -48,12 +48,12 @@ _Note first time will take a a while to run for as the `oracle-xe configure` scr
 
 ```bash
 docker run -d \
-  -p 32118:1521 \
-  -p 35518:5500 \
+  -p 11521:1521 \
+  -p 15500:5500 \
   --name=oracle-xe \
   --volume ~/docker/oracle-xe:/opt/oracle/oradata \
   --network=oracle_network \
-  oracle-xe:18c
+  wsyski/dockerhub:oracle-xe
   
 # As this takes a long time to run you can keep track of the initial installation by running:
 docker logs oracle-xe
@@ -63,8 +63,8 @@ Run parameters:
 
 Name | Required | Description 
 --- | --- | ---
-`-p 1521`| Required | TNS Listener. `32118:1521` maps `32118` on your laptop to `1521` on the container.
-`-p 5500`| Optional | Enterprise Manager (EM) Express. `35518:5500` maps `35518` to your laptop to `5500` on the container. You can then access EM via https://localhost:35518/em 
+`-p 1521`| Required | TNS Listener. `11521:1521` maps `11521` on your laptop to `1521` on the container.
+`-p 5500`| Optional | Enterprise Manager (EM) Express. `15500:5500` maps `15500` to your laptop to `5500` on the container. You can then access EM via https://localhost:15500/em 
 `--name` | Optional | Name of container. Optional but recommended
 `--volume /opt/oracle/oradata` | Optional | (recommended) If provided, data files will be stored here. If the container is destroyed can easily rebuild container using the data files.
 `--network` | Optional | If other containers need to connect to this one (ex: [ORDS](https://github.com/martindsouza/docker-ords)) then they should all be on the same docker network.
@@ -92,11 +92,11 @@ _Note `sqlcl` is an alias for [SQLcl](https://www.oracle.com/database/technologi
 
 ```bash
 -- Connect to CDB
-sqlcl sys/Oracle18@localhost:32118/XE as sysdba
+sqlcl sys/axiell1@localhost:11521/XE as sysdba
 
 
 -- Connect to default PDB
-sqlcl sys/Oracle18@localhost:32118/XEPDB1 as sysdba
+sqlcl sys/axiell1@localhost:11521/XEPDB1 as sysdba
 ```
 
 ### APEX Install
@@ -111,8 +111,8 @@ In some cases you may need to login to the server to modify or test something on
 docker exec -it oracle-xe bash -c "source /home/oracle/.bashrc; bash"
 
 # Once connected to run sqlplus:
-$ORACLE_HOME/bin/sqlplus sys/Oracle18@localhost/XE as sysdba
-$ORACLE_HOME/bin/sqlplus sys/Oracle18@localhost/XEPDB1 as sysdba
+$ORACLE_HOME/bin/sqlplus sys/axiell1@localhost/XE as sysdba
+$ORACLE_HOME/bin/sqlplus sys/axiell1@localhost/ARENA as sysdba
 
 
 # Listener start/stop
@@ -124,14 +124,14 @@ $ORACLE_HOME/bin/lsnrctl start
 
 _Note: Flash is required_</br>
 
-https://localhost:35518/em
+https://localhost:15500/em
 
 ### Creating a PDB
 
-First connect to the CDB as `sysdba`: `sqlcl sys/Oracle18@localhost:32118/XE as sysdba`
+First connect to the CDB as `sysdba`: `sqlcl sys/axiell1@localhost:11521/XE as sysdba`
 
 ```sql
--- Note XEPDB1 is created by default so demoing with XEPDB2
+-- Note ARENA is created by default so demoing with XEPDB2
 create pluggable database xepdb2 admin user pdb_adm identified by Oradoc_db1
   file_name_convert=('/opt/oracle/oradata/XE/pdbseed','/opt/oracle/oradata/XE/XEPDB2');
 
@@ -155,7 +155,7 @@ To connect to the new PDB :
 
 ```bash
 # Note: the password is the CDB SYS password, not the pdb_adm admin user
-sqlcl sys/Oracle18@localhost:32118/XEPDB2 as sysdba
+sqlcl sys/axiell1@localhost:11521/XEPDB2 as sysdba
 ```
 
 ### `emp` and `dept` tables
@@ -167,7 +167,7 @@ Install `emp` and `dept` sample tables:</br>
 
 ### Preserving `/opt/oracle/oradata` for Multiple Copies
 
-Each time you start a container that does has an empty `/opt/oracle/oradata` Oracle XE is configured and the data files are created for the CDB and one PDB (`XEPDB1`). If you plan to launch multiple separate containers for Oracle XE, it is unnecessary to spend this time waiting for the same base files to be created. The solution is fairly simple. It involves creating a sample/seed container, extracting the data files, then copying those data files each time you launch a new container for a new instance of Oracle XE. The following commands demonstrates how to do this:
+Each time you start a container that does has an empty `/opt/oracle/oradata` Oracle XE is configured and the data files are created for the CDB and one PDB (`ARENA`). If you plan to launch multiple separate containers for Oracle XE, it is unnecessary to spend this time waiting for the same base files to be created. The solution is fairly simple. It involves creating a sample/seed container, extracting the data files, then copying those data files each time you launch a new container for a new instance of Oracle XE. The following commands demonstrates how to do this:
 
 ```bash
 docker run -d \

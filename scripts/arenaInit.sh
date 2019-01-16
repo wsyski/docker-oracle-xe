@@ -13,6 +13,16 @@ sqlplus / as sysdba << EOF
   alter pluggable database ARENA open read write;
   alter pluggable database all save state;
   alter session set container=ARENA;
+  grant dba to axsys with admin option;
+  grant create any job to axsys with admin option;
+  GRANT aq_administrator_role TO axsys with admin option;
+  GRANT aq_user_role TO axsys with admin option;
+  GRANT EXECUTE ON dbms_aqadm TO axsys with grant option;
+  GRANT EXECUTE ON dbms_aq TO axsys with grant option;
+  grant execute on utl_smtp to axsys with grant option;
+  grant execute on utl_http to axsys with grant option;
+  grant execute on utl_file to axsys with grant option;
+  GRANT EXECUTE ON dbms_aqin TO axsys with grant option;
   create tablespace data datafile '/opt/oracle/oradata/XE/ARENA/data01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
   create tablespace image datafile '/opt/oracle/oradata/XE/ARENA/image01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
   create tablespace indx datafile '/opt/oracle/oradata/XE/ARENA/indx01.dbf' size 1024M autoextend on next 512m maxsize 6194M extent management local;

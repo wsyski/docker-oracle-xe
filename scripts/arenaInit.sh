@@ -12,7 +12,7 @@ sqlplus / as sysdba << EOF
   file_name_convert=('/opt/oracle/oradata/XE/pdbseed','/opt/oracle/oradata/XE/ARENA');
   alter pluggable database ARENA open read write;
   alter pluggable database all save state;
-  alter session set container=ARENA
+  alter session set container=ARENA;
   create tablespace data datafile '/opt/oracle/oradata/XE/ARENA/data01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
   create tablespace image datafile '/opt/oracle/oradata/XE/ARENA/image01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
   create tablespace indx datafile '/opt/oracle/oradata/XE/ARENA/indx01.dbf' size 1024M autoextend on next 512m maxsize 6194M extent management local;

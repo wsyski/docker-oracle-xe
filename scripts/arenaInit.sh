@@ -26,8 +26,8 @@ sqlplus / as sysdba << EOF
   create tablespace data datafile '/opt/oracle/oradata/XE/ARENA/data01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
   create tablespace image datafile '/opt/oracle/oradata/XE/ARENA/image01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
   create tablespace indx datafile '/opt/oracle/oradata/XE/ARENA/indx01.dbf' size 1024M autoextend on next 512m maxsize 6194M extent management local;
-  CREATE DIRECTORY dp_dir AS '/opt/oracle/oradata/dp';
-  GRANT ALL ON DIRECTORY dp_dir TO PUBLIC;
+  CREATE DIRECTORY arenaDatadir AS '/opt/oracle/arena';
+  GRANT ALL ON DIRECTORY arenaDatadir TO PUBLIC;
   exec dbms_service.CREATE_SERVICE('arena-central','arena-central');
   exec dbms_service.start_service('arena-central');
   alter system register;

@@ -156,6 +156,7 @@ To connect to the new PDB :
 ```bash
 # Note: the password is the CDB SYS password, not the pdb_adm admin user
 sqlcl sys/axiell1@localhost:11521/XEPDB2 as sysdba
+sqlcl CENTRAL2/Carena2@tardb006.arena.se1.axiell:1521/XE
 ```
 
 ### `emp` and `dept` tables

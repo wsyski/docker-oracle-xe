@@ -97,6 +97,8 @@ sqlcl sys/axiell1@localhost:11521/XE as sysdba
 
 -- Connect to default PDB
 sqlcl sys/axiell1@localhost:11521/XEPDB1 as sysdba
+sqlcl axsys/GGHt7@localhost:11521/ARENA
+sqlcl axsys/GGHt7@arena-local:11521/ARENA
 ```
 
 ### APEX Install

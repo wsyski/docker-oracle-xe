@@ -36,6 +36,10 @@ sqlplus / as sysdba << EOF
   exec dbms_service.start_service('arena-local');
   alter system register;
   alter pluggable database save state;
+  exec dbms_service.CREATE_SERVICE('ehub-local','ehub-local');
+  exec dbms_service.start_service('ehub-local');
+  alter system register;
+  alter pluggable database save state;
 
   ALTER PROFILE DEFAULT LIMIT FAILED_LOGIN_ATTEMPTS UNLIMITED PASSWORD_LIFE_TIME UNLIMITED;
   create role arena_user;

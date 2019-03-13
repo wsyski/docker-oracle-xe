@@ -23,19 +23,6 @@ sqlplus / as sysdba << EOF
   GRANT EXECUTE ON dbms_aqin TO axsys with grant option;
   CREATE DIRECTORY arenaDatadir AS '/opt/oracle/arena';
   GRANT ALL ON DIRECTORY arenaDatadir TO PUBLIC;
-  exec dbms_service.CREATE_SERVICE('arena-central','arena-central');
-  exec dbms_service.start_service('arena-central');
-  alter system register;
-  alter pluggable database save state;
-  exec dbms_service.CREATE_SERVICE('arena-local','arena-local');
-  exec dbms_service.start_service('arena-local');
-  alter system register;
-  alter pluggable database save state;
-  exec dbms_service.CREATE_SERVICE('ehub','ehub');
-  exec dbms_service.start_service('ehub');
-  alter system register;
-  alter pluggable database save state;
-
   ALTER PROFILE DEFAULT LIMIT FAILED_LOGIN_ATTEMPTS UNLIMITED PASSWORD_LIFE_TIME UNLIMITED;
   create role arena_user;
   GRANT connect TO arena_user;
@@ -54,4 +41,30 @@ sqlplus / as sysdba << EOF
   grant execute on sys.utl_file to arena_user;
   create role arena_dba identified by aarenaa;
   grant dba to arena_dba;
+  alter system register;
+  alter pluggable database save state;
+
+  alter session set container=XEPDB1;
+  exec dbms_service.STOP_SERVICE('arena-central');
+  exec dbms_service.DROP_SERVICE('arena-central');
+  exec dbms_service.CREATE_SERVICE('arena-central','arena-central');
+  exec dbms_service.start_service('arena-central');
+  alter system register;
+  alter pluggable database save state;
+
+  alter session set container=XEPDB1;
+  exec dbms_service.STOP_SERVICE('arena-local');
+  exec dbms_service.DROP_SERVICE('arena-local');
+  exec dbms_service.CREATE_SERVICE('arena-local','arena-local');
+  exec dbms_service.start_service('arena-local');
+  alter system register;
+  alter pluggable database save state;
+
+  alter session set container=XEPDB1;
+  exec dbms_service.STOP_SERVICE('ehub');
+  exec dbms_service.DROP_SERVICE('ehub');
+  exec dbms_service.CREATE_SERVICE('ehub','ehub');
+  exec dbms_service.start_service('ehub');
+  alter system register;
+  alter pluggable database save state;
 EOF

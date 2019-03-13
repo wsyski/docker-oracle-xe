@@ -8,11 +8,9 @@ sqlplus / as sysdba << EOF
   alter system set sessions=600 scope=spfile;
   alter system set db_recovery_file_dest_size=4096G scope=both;
 
-  create pluggable database ARENA admin user axsys identified by GGHt7
-  file_name_convert=('/opt/oracle/oradata/XE/pdbseed','/opt/oracle/oradata/XE/ARENA');
-  alter pluggable database ARENA open read write;
-  alter pluggable database all save state;
-  alter session set container=ARENA;
+  alter session set container=XEPDB1;
+  create user axsys identified by GGHt7;
+  grant dba to axsys;
   grant dba to axsys with admin option;
   grant create any job to axsys with admin option;
   GRANT aq_administrator_role TO axsys with admin option;
@@ -23,9 +21,6 @@ sqlplus / as sysdba << EOF
   grant execute on utl_http to axsys with grant option;
   grant execute on utl_file to axsys with grant option;
   GRANT EXECUTE ON dbms_aqin TO axsys with grant option;
-  create tablespace data datafile '/opt/oracle/oradata/XE/ARENA/data01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
-  create tablespace image datafile '/opt/oracle/oradata/XE/ARENA/image01.dbf' size 1024M autoextend on next 512m maxsize 9216M extent management local;
-  create tablespace indx datafile '/opt/oracle/oradata/XE/ARENA/indx01.dbf' size 1024M autoextend on next 512m maxsize 6194M extent management local;
   CREATE DIRECTORY arenaDatadir AS '/opt/oracle/arena';
   GRANT ALL ON DIRECTORY arenaDatadir TO PUBLIC;
   exec dbms_service.CREATE_SERVICE('arena-central','arena-central');

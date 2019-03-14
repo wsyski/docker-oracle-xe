@@ -6,9 +6,9 @@ echo "Initializing Arena"
 sqlplus / as sysdba << EOF
   alter system set processes=300 scope=spfile;
   alter system set sessions=600 scope=spfile;
-  alter system set db_recovery_file_dest_size=4096G scope=both;
-
-  alter session set container=XEPDB1;
+  alter system set utl_file_dir='*' scope=spfile;
+EOF
+sqlplus sys/axiell1@localhost/XEPDB1 as sysdba << EOF
   create user axsys identified by GGHt7;
   grant dba to axsys;
   grant dba to axsys with admin option;
@@ -41,28 +41,17 @@ sqlplus / as sysdba << EOF
   grant execute on sys.utl_file to arena_user;
   create role arena_dba identified by aarenaa;
   grant dba to arena_dba;
-  alter system register;
-  alter pluggable database save state;
 
-  alter session set container=XEPDB1;
-  exec dbms_service.STOP_SERVICE('arena-central');
-  exec dbms_service.DROP_SERVICE('arena-central');
   exec dbms_service.CREATE_SERVICE('arena-central','arena-central');
   exec dbms_service.start_service('arena-central');
   alter system register;
   alter pluggable database save state;
 
-  alter session set container=XEPDB1;
-  exec dbms_service.STOP_SERVICE('arena-local');
-  exec dbms_service.DROP_SERVICE('arena-local');
   exec dbms_service.CREATE_SERVICE('arena-local','arena-local');
   exec dbms_service.start_service('arena-local');
   alter system register;
   alter pluggable database save state;
 
-  alter session set container=XEPDB1;
-  exec dbms_service.STOP_SERVICE('ehub');
-  exec dbms_service.DROP_SERVICE('ehub');
   exec dbms_service.CREATE_SERVICE('ehub','ehub');
   exec dbms_service.start_service('ehub');
   alter system register;
